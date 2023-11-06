@@ -1,0 +1,6 @@
+name: shinobiWay
+version: '${project.version}'
+main: eportela.shinobiway.ShinobiWay
+authors: [eportela]
+description: plugin 
+website: https://github.com/empsa1
