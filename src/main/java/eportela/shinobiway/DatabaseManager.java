@@ -14,10 +14,10 @@ public class DatabaseManager {
 
             // Connect to the database
             String url = "jdbc:mysql://localhost:3306/shinobiway";
-            String username = "shinobiWay";
-            //String password = "pluginmanager";
+            String username = "god";
+            String password = "pluginmanager";
 
-            connection = DriverManager.getConnection(url, username, null);
+            connection = DriverManager.getConnection(url, username, password);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             // Handle connection errors
@@ -29,4 +29,14 @@ public class DatabaseManager {
     public static Connection getConnection() {
         return connection;
     }
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

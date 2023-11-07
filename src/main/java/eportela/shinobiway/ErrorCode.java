@@ -1,0 +1,16 @@
+package eportela.shinobiway;
+
+public enum ErrorCode {
+    TARGET_VOID,
+    TARGET_HAS_GROUP,
+    USER_NOT_OWNER,
+    INVALID_TARGET,
+    USER_NEUTRAL_HIMSELF,
+    USER_ALLIED_HIMSELF,
+    ALREADY_NEUTRAL,
+    ALREADY_ALLY,
+    ALREADY_ENEMY,
+    USAGE,
+    USER_ALREADY_GROUP,
+    TARGET_NO_GROUP
+}

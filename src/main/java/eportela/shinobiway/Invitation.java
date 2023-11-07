@@ -20,6 +20,10 @@ public class Invitation {
     public static void acceptInvite() {
     }
 
+    public static boolean sendInvite(String[] args, Player player, ShinobiGroup group) {
+        return true;
+    }
+
     public UUID getSenderUUID() {
         return senderUUID;
     }

@@ -1,6 +1,6 @@
 package eportela.shinobiway;
 
-public enum VillageRank {
+public enum ShinobiRank {
     KAGE,
     KAGE_ADVISOR,
     SHADOW_KAGE,

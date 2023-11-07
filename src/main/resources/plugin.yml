@@ -4,3 +4,9 @@ main: eportela.shinobiway.ShinobiWay
 authors: [eportela]
 description: plugin 
 website: https://github.com/empsa1
+
+commands:
+  shinobiGroup:
+    description: Your command description here
+    usage: /shinobiGroup <subcommand>
+    permission: shinobiway.shinobigroup.*
