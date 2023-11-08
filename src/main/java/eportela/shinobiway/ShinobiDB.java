@@ -10,17 +10,21 @@ import java.util.UUID;
 
 public class ShinobiDB {
     public static boolean removePlayerFromGroup(Player player, ShinobiGroup group) {
-        if (ShinobiGroupDB.getGroup(group.getName()) == null) {
+        if (ShinobiGroupDB.getGroup(group.getName()).getName().length() == 0) {
             Utils.error_handler(player, ErrorCode.TARGET_NO_GROUP.ordinal());
+            return false;
+        }
+        if (ShinobiGroupDB.getGroup(group.getName()).getOwnerUUID().toString().equals(player.getUniqueId().toString())) {
+            ShinobiWay.com_handler(player, "You cant leave " + group.getName() + "!. You are the owner. First pass the ownership!", 1);
             return false;
         }
         String playerUUID = player.getUniqueId().toString();
         try {
             String sql = "DELETE FROM shinobi_members WHERE player_uuid = ?";
-            try (PreparedStatement pstmt = ShinobiWay.databaseManager.getConnection().prepareStatement(sql)) {
+            try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(sql)) {
                 pstmt.setString(1, playerUUID);
                 int rowsAffected = pstmt.executeUpdate();
-                ShinobiWay.com_handler(player, "You successfully left " + group, 0);
+                ShinobiWay.com_handler(player, "You successfully left " + group.getName(), 0);
                 return rowsAffected > 0;
             }
         } catch (SQLException e) {
@@ -32,9 +36,9 @@ public class ShinobiDB {
     }
 
     public static boolean addPlayerToGroup(Player player, String groupName) {
-        try (Connection conn = DatabaseManager.getConnection()) {
+        try {
             String sql = "INSERT INTO shinobi_members (group_name, shinobi_rank, player_uuid) VALUES (?, ?, ?)";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(sql)) {
                 pstmt.setString(1, groupName);
                 pstmt.setInt(2, ShinobiRank.GENIN.ordinal());
                 pstmt.setString(3, player.getUniqueId().toString());
@@ -59,7 +63,7 @@ public class ShinobiDB {
         UUID playerUUID = player.getUniqueId();
         try {
             String sql = "SELECT shinobi_rank FROM shinobi_members WHERE player_uuid = ?";
-            try (PreparedStatement pstmt = ShinobiWay.databaseManager.getConnection().prepareStatement(sql)) {
+            try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(sql)) {
                 pstmt.setString(1, playerUUID.toString());
                 ResultSet resultSet = pstmt.executeQuery();
                 if (resultSet.next()) {
@@ -73,11 +77,10 @@ public class ShinobiDB {
         return null;
     }
 
-    public static ShinobiGroup getPlayerGroup(Player player) {
-        UUID playerUUID = player.getUniqueId();
+    public static ShinobiGroup getPlayerGroup(UUID playerUUID) {
         try {
             String sql = "SELECT group_name FROM shinobi_members WHERE player_uuid = ?";
-            try (PreparedStatement pstmt = ShinobiWay.databaseManager.getConnection().prepareStatement(sql)) {
+            try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(sql)) {
                 pstmt.setString(1, playerUUID.toString());
                 ResultSet resultSet = pstmt.executeQuery();
 

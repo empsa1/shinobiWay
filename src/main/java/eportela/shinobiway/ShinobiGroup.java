@@ -11,6 +11,10 @@ class ShinobiGroup {
         this.groupName = groupName;
     }
 
+    public UUID getOwnerUUID() {
+        return ownerUUID;
+    }
+
     public String getName() {
         return groupName;
     }

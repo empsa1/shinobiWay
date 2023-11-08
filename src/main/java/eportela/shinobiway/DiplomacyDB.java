@@ -12,9 +12,10 @@ public class DiplomacyDB {
     public static DiplomacyStatus getDiplomacyStatus(ShinobiGroup group1, ShinobiGroup group2) {
         String groupName1 = group1.getName();
         String groupName2 = group2.getName();
+        DiplomacyStatus status = DiplomacyStatus.NEUTRAL;
         try {
-            String sql = "SELECT group_diplomacy FROM shinobi_groups WHERE (group_name = ? AND group_name = ?) OR (group_name = ? AND group_name = ?)";
-            try (PreparedStatement pstmt = ShinobiWay.databaseManager.getConnection().prepareStatement(sql)) {
+            String sql = "SELECT diplomacy_type FROM diplomacy WHERE (group_name1 = ? AND group_name2 = ?) OR (group_name2 = ? AND group_name1 = ?)";
+            try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(sql)) {
                 pstmt.setString(1, groupName1);
                 pstmt.setString(2, groupName2);
                 pstmt.setString(3, groupName2);
@@ -23,57 +24,56 @@ public class DiplomacyDB {
                 ResultSet resultSet = pstmt.executeQuery();
 
                 if (resultSet.next()) {
-                    int statusValue = resultSet.getInt("status");
-                    return DiplomacyStatus.values()[statusValue];
+                    status = DiplomacyStatus.values()[resultSet.getInt("diplomacy_type")];
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return DiplomacyStatus.NEUTRAL; // Default to NEUTRAL if status is not found or an error occurs
+        return  status; // Default to NEUTRAL if status is not found or an error occurs
     }
 
     public static boolean setDiplomacy(ShinobiGroup group1, ShinobiGroup group2, DiplomacyStatus status) {
+        System.out.println("Entered setDiplomacy() with: " + group1.getName() +  " " + group2.getName() + " " + status);
         String groupName1 = group1.getName();
         String groupName2 = group2.getName();
         int statusValue = status.ordinal(); // Assuming DiplomacyStatus has a getValue() method.
-        int groupTypeValue1 = DiplomacyDB.getDiplomacyStatus(group1, group2).ordinal();
-        int groupTypeValue2 = DiplomacyDB.getDiplomacyStatus(group2, group1).ordinal();
+        String sql = "INSERT INTO diplomacy (group_name1, group_name2, diplomacy_type) " +
+                "VALUES (?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE diplomacy_type = VALUES(diplomacy_type)";
 
-        try {
-            String sql = "UPDATE shinobi_groups SET group_diplomacy = ? WHERE group_name = ? AND group_type = ?";
-            try (PreparedStatement pstmt = ShinobiWay.databaseManager.getConnection().prepareStatement(sql)) {
-                pstmt.setInt(1, statusValue);
-                pstmt.setString(2, groupName1);
-                pstmt.setInt(3, groupTypeValue1);
-                int rowsUpdated1 = pstmt.executeUpdate();
-                pstmt.setString(2, groupName2);
-                pstmt.setInt(3, groupTypeValue2);
-                int rowsUpdated2 = pstmt.executeUpdate();
+        try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(sql)) {
+            pstmt.setString(1, groupName1);
+            pstmt.setString(2, groupName2);
+            pstmt.setInt(3, statusValue);
 
-                if (rowsUpdated1 > 0 && rowsUpdated2 > 0) {
-                    // Both rows were updated successfully
-                    return true;
-                }
-            }
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // Operation failed
+
+        return false;
     }
     public static boolean tryRivalry(Player player, ShinobiGroup inviterV, String[] args) {
+        System.out.println("Inside tryRivalry info: " + player.getDisplayName() + inviterV.getName() + args[1]);
         if (args[1].length() == 0) {
             Utils.error_handler(player, ErrorCode.INVALID_TARGET.ordinal());
+            return false;
         }
-        String inviterName = inviterV.getName();
-        String invitedName = args[1];
+        if (args[1].equals(inviterV.getName())) {
+            ShinobiWay.com_handler(player, "You can´t declare war on yourself smart pants!", 1);
+            return false;
+        }
         DiplomacyStatus status = getDiplomacyStatus(inviterV, ShinobiGroupDB.getGroup(args[1]));
+        System.out.println("Current status: " + status);
         if (status == DiplomacyStatus.ENEMIES) {
             Utils.error_handler(player, ErrorCode.ALREADY_ENEMY.ordinal());
         }
         else {
-            setDiplomacy(inviterV,ShinobiGroupDB.getGroup(args[1]), DiplomacyStatus.ENEMIES);
-            return true;
+            System.out.println("Entering setDiplomacy()");
+            ShinobiWay.com_handler(player, "You have successfully declared " + args[1] + " as your enemy!", 0);
+            return (setDiplomacy(inviterV,ShinobiGroupDB.getGroup(args[1]), DiplomacyStatus.ENEMIES));
         }
         return false;
     }
@@ -89,7 +89,7 @@ public class DiplomacyDB {
             return false;
         }
         else {
-
+            return true;
         }
         return false;
     }

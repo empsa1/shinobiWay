@@ -7,27 +7,27 @@ import org.bukkit.entity.Player;
 
 public class ShinobiGroupCommand implements CommandExecutor {
     public static boolean CommandHandler(Player player, ShinobiGroup group, String[] args) {
-         if (args[0].equalsIgnoreCase("invite")) {
-            return (Invitation.sendInvite(args, player, group));
-        } else if (args[0].equalsIgnoreCase("leave")) {
+         if (args[0].equalsIgnoreCase("invite")) { //maybe
+            return (Invitation.inviteToGroup(player, args));
+        } else if (args[0].equalsIgnoreCase("leave")) { //working
             return (ShinobiDB.removePlayerFromGroup(player, group));
-        } else if (args[0].equalsIgnoreCase("bank")) {
+        } else if (args[0].equalsIgnoreCase("bank")) { //working
             return (ShinobiGroupDB.displayBank(player, group));
-        } else if (args[0].equalsIgnoreCase("owner")) {
+        } else if (args[0].equalsIgnoreCase("owner")) { //maybe
             return (ShinobiGroupDB.setGroupOwner(player, group, args));
         } else if (args[0].equalsIgnoreCase("ally")) {
             return (DiplomacyDB.tryAlliance(player, group, args));
-        } else if (args[0].equalsIgnoreCase("enemy")) {
+        } else if (args[0].equalsIgnoreCase("enemy")) { //working
             return (DiplomacyDB.tryRivalry(player, group, args));
         } else if (args[0].equalsIgnoreCase("neutral")) {
             return (DiplomacyDB.tryNeutral(player, group, args));
-        } else if (args[0].equalsIgnoreCase("disband")) {
+        } else if (args[0].equalsIgnoreCase("disband")) { //working
             return (ShinobiGroupDB.tryDisband(player, group));
-        } else if (args[0].equalsIgnoreCase("kick")) {
+        } else if (args[0].equalsIgnoreCase("kick")) { //working
             return (HierarchyDB.tryKick(player, group, args));
-        } else if (args[0].equalsIgnoreCase("demote")) {
+        } else if (args[0].equalsIgnoreCase("demote")) { //maybe
             return (HierarchyDB.tryDemote(player, group, args));
-        } else if (args[0].equalsIgnoreCase("promote")) {
+        } else if (args[0].equalsIgnoreCase("promote")) { //maybe
             return (HierarchyDB.tryPromote(player, group, args));
         } else if (args[0].equalsIgnoreCase("war")) {
             return (War.tryOpenWARGUI(player, group, args));
@@ -38,16 +38,16 @@ public class ShinobiGroupCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            ShinobiGroup playerGroup = ShinobiDB.getPlayerGroup(player);
+            ShinobiGroup playerGroup = ShinobiDB.getPlayerGroup(player.getUniqueId());
             if (playerGroup != null && playerGroup.getName().length() != 0) {
                 System.out.println("Going inside CommandHandler");
                 return (CommandHandler(player, playerGroup, args));
-            } else if (args[0].equalsIgnoreCase("create")) {
+            } else if (args[0].equalsIgnoreCase("create")) { //working
                 return (ShinobiGroupDB.createGroup(player, args));
-            } else if (args[0].equalsIgnoreCase("accept") && args[1].length() != 0) {
-                Invitation.acceptInvite();
+            } else if (args[0].equalsIgnoreCase("accept")) { //maybe
+                Invitation.acceptGroupInvite(player, args); //working
             } else {
-                ShinobiWay.com_handler(player, "You are not able to request that!", 1);
+                ShinobiWay.com_handler(player, "You are not apart of a group!", 1);
                 return false;
             }
             return false;

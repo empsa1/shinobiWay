@@ -2,12 +2,15 @@ package eportela.shinobiway;
 
 import org.bukkit.entity.Player;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseManager {
     private static Connection connection;
+    private static DatabaseManager instance;
 
-    public DatabaseManager() {
+    DatabaseManager() {
         try {
             // Register the MySQL driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -24,19 +27,24 @@ public class DatabaseManager {
         }
     }
 
-
+    public static synchronized DatabaseManager getInstance() {
+        if (instance == null) {
+            instance = new DatabaseManager();
+        }
+        return instance;
+    }
 
     public static Connection getConnection() {
         return connection;
     }
-    public void closeConnection() {
-        if (connection != null) {
-            try {
+
+    public void close() {
+        try {
+            if (connection != null) {
                 connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-
 }

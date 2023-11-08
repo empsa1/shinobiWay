@@ -18,7 +18,7 @@ public class ShinobiMember {
     public static ShinobiRank getShinobiRank(UUID playerUUID) {
         try {
             String selectRankSql = "SELECT shinobi_rank FROM shinobi_members WHERE player_uuid = ?";
-            try (PreparedStatement selectRankStmt = ShinobiWay.databaseManager.getConnection().prepareStatement(selectRankSql)) {
+            try (PreparedStatement selectRankStmt = DatabaseManager.getConnection().prepareStatement(selectRankSql)) {
                 selectRankStmt.setString(1, playerUUID.toString());
                 ResultSet resultSet = selectRankStmt.executeQuery();
 
