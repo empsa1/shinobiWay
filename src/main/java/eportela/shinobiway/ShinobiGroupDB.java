@@ -40,7 +40,7 @@ public class ShinobiGroupDB {
                 ResultSet resultSet = pstmt.executeQuery();
                 if (resultSet.next()) {
                     int balance = resultSet.getInt("group_balance");
-                    ShinobiWay.com_handler(player, groupName + "balance: " + balance + " Ryo", 0);
+                    ShinobiWay.com_handler(player, groupName + " balance: " + balance + " Ryo", 0);
                     return true;
                 }
             }

@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class ShinobiGroupCommand implements CommandExecutor {
     public static boolean CommandHandler(Player player, ShinobiGroup group, String[] args) {
-         if (args[0].equalsIgnoreCase("invite")) { //maybe
+          if (args[0].equalsIgnoreCase("invite")) { //needs work
             return (Invitation.inviteToGroup(player, args));
         } else if (args[0].equalsIgnoreCase("leave")) { //working
             return (ShinobiDB.removePlayerFromGroup(player, group));
@@ -39,7 +39,11 @@ public class ShinobiGroupCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             ShinobiGroup playerGroup = ShinobiDB.getPlayerGroup(player.getUniqueId());
-            if (playerGroup != null && playerGroup.getName().length() != 0) {
+            if (args == null || args[0].length() == 0) {
+                ShinobiWay.com_handler(player, "Invalid input!", 1);
+                return false;
+            }
+            else if (playerGroup != null && playerGroup.getName().length() != 0) {
                 System.out.println("Going inside CommandHandler");
                 return (CommandHandler(player, playerGroup, args));
             } else if (args[0].equalsIgnoreCase("create")) { //working

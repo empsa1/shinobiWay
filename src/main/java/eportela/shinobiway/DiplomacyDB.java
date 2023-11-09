@@ -1,8 +1,10 @@
 package eportela.shinobiway;
 
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -79,18 +81,43 @@ public class DiplomacyDB {
     }
 
     public static boolean tryNeutral(Player player, ShinobiGroup group1, String[] args) {
+        ShinobiGroup group = ShinobiDB.getPlayerGroup(player.getUniqueId());
+        if (group == null || group.getName().length() == 0) {
+            ShinobiWay.com_handler(player, "You are not part of a group!", 1);
+            return false;
+        }
+        if (args == null) {
+            return false;
+        }
+        if (args.length < 2 || args[1].isEmpty()) {
+            ShinobiWay.com_handler(player, "Invalid player!", 1);
+            return false;
+        }
+        if (!player.getUniqueId().equals(group.getOwnerUUID())) {
+            ShinobiWay.com_handler(player, "You must be the owner of the group to invite players.", 1);
+            return false;
+        }
         ShinobiGroup group2 = ShinobiGroupDB.getGroup(args[1]);
         DiplomacyStatus status = getDiplomacyStatus(group1, group2);
         if (status == DiplomacyStatus.ALLIED) {
             setDiplomacy(group1, group2, DiplomacyStatus.NEUTRAL);
         }
         else if (status == DiplomacyStatus.NEUTRAL) {
-            Utils.error_handler(player, ErrorCode.ALREADY_NEUTRAL.ordinal());
+            ShinobiWay.com_handler(player, "You are already neutral with: " + group2.getName(), 1);
             return false;
         }
         else {
+            ShinobiWay.com_handler();
+            BukkitRunnable expirationTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                }
+
+            };
+            expirationTask.runTaskLater(ShinobiWay.myManager.getPlugin(),20*30);
             return true;
-        }
+            }
         return false;
     }
 

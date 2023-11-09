@@ -13,7 +13,7 @@ public class Invitation {
 
     public static boolean inviteToGroup(Player player, String[] args) {
         ShinobiGroup group = ShinobiDB.getPlayerGroup(player.getUniqueId());
-        if (group.getName().length() == 0) {
+        if (group == null || group.getName().length() == 0) {
             ShinobiWay.com_handler(player, "You are not part of a group!", 1);
             return false;
         }
@@ -46,26 +46,21 @@ public class Invitation {
             return false;
         }
 
-        String invitationCode = group.getName();
-
         // Add or create an invitation code list for the target player
-        if (!ShinobiWay.getInvitationCodes().containsKey(playerUUID)) {
-            ShinobiWay.getInvitationCodes().put(playerUUID, new ArrayList<>());
+        if (ShinobiWay.getInvitationCodes().containsPlayer(playerUUID.toString()) == null) {
+            ShinobiWay.getInvitationCodes().addPlayer(playerUUID.toString());
         }
-        ShinobiWay.getInvitationCodes().get(playerUUID).add(invitationCode);
-
+        ShinobiWay.getInvitationCodes().addInvite(playerUUID.toString(), group.getName());
         ShinobiWay.com_handler(target, "You have been invited to join the group " + group.getName() + ". Type /shinobiGroup accept " + group.getName() + " to accept.", 0);
         ShinobiWay.com_handler(player, "Invitation sent to " + target.getDisplayName() + ".", 0);
-
         BukkitRunnable expirationTask = new BukkitRunnable() {
             @Override
             public void run() {
-                if (ShinobiWay.getInvitationCodes().containsKey(target.getUniqueId())) {
-                    List<String> invites = ShinobiWay.getInvitationCodes().get(target.getUniqueId());
-                    if (invites.contains(invitationCode)) {
-                        invites.remove(invitationCode);
-                        if (invites.isEmpty()) {
-                            ShinobiWay.getInvitationCodes().remove(target.getUniqueId());
+                if (ShinobiWay.getInvitationCodes().containsPlayer(target.getUniqueId().toString()) != null) {
+                    if (ShinobiWay.getInvitationCodes().inviteExists(ShinobiWay.getInvitationCodes().containsPlayer(target.getUniqueId().toString()), group.getName())) {
+                        ShinobiWay.getInvitationCodes().removeInvite(target.getUniqueId().toString(), group.getName());
+                        if (ShinobiWay.getInvitationCodes().containsPlayer(target.getUniqueId().toString()).size() != 1) {
+                            ShinobiWay.getInvitationCodes().removeInvite(target.getUniqueId().toString(), group.getName());
                             ShinobiWay.com_handler(target, "Your invitation from " + player.getName() + " has expired.", 1);
                         }
                     }
@@ -77,28 +72,28 @@ public class Invitation {
         return true;
     }
 
-    public static boolean acceptGroupInvite(Player target, String[] args) {
-        if (args == null || args.length < 2 || args[1].isEmpty()) {
-            ShinobiWay.com_handler(target, "Invalid group name! Correct usage: /shinobiGroup accept <group_name>", 1);
+    public static boolean acceptGroupInvite(Player player, String[] args) {
+        if (args == null || args.length < 2 || args[1].length() == 0) {
+            ShinobiWay.com_handler(player, "Invalid group name! Correct usage: /shinobiGroup accept <group_name>", 1);
             return false;
         }
 
-        UUID playerUUID = target.getUniqueId();
-        if (!ShinobiWay.getInvitationCodes().containsKey(playerUUID)) {
-            ShinobiWay.com_handler(target, "No pending group invitation found.", 1);
+        UUID playerUUID = player.getUniqueId();
+        if (ShinobiWay.getInvitationCodes().containsPlayer(playerUUID.toString()) == null) {
+            ShinobiWay.com_handler(player, "No pending group invitation found.", 1);
             return false;
         }
 
         String groupToJoin = args[1];
-        String storedInvitationCode = ShinobiWay.getInvitationCodes().get(playerUUID).toString();
-        if (!storedInvitationCode.equals(groupToJoin)) {
-            ShinobiWay.com_handler(target, "Invalid invitation code or group name.", 1);
+        String storedInvitationCode = ShinobiWay.getInvitationCodes().containsPlayer(playerUUID.toString()).toString();
+        System.out.println("Stored invitation code: " + storedInvitationCode);
+        if (!ShinobiWay.getInvitationCodes().inviteExists(ShinobiWay.getInvitationCodes().containsPlayer(playerUUID.toString()), groupToJoin)) {
+            ShinobiWay.com_handler(player, "There is no invite for you from " + groupToJoin, 1);
             return false;
         }
-
-        ShinobiWay.getInvitationCodes().remove(playerUUID);
-        if (ShinobiDB.addPlayerToGroup(target, groupToJoin)) {
-            ShinobiWay.com_handler(target, "You have successfully joined the group.", 0);
+        if (ShinobiDB.addPlayerToGroup(player, groupToJoin)) {
+            ShinobiWay.getInvitationCodes().removePlayer(playerUUID.toString());
+            ShinobiWay.com_handler(player, "You have successfully joined the group.", 0);
             return true;
         }
         return false;

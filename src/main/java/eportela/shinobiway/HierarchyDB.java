@@ -47,6 +47,9 @@ public class HierarchyDB {
                 deletePlayerStmt.setString(1, playerUUID.toString());
                 deletePlayerStmt.executeUpdate();
                 ShinobiWay.com_handler(player, "You successfully kicked " + args[1] + " from " + group.getName(), 0);
+                if (PlayerUtils.getOnlinePlayer(args[1]).getDisplayName().length() != 0) {
+                    ShinobiWay.com_handler(PlayerUtils.getOnlinePlayer(args[1]), "You have been kicked from " + group.getName(), 0);
+                }
                 return true;
             }
         } catch (SQLException e) {
