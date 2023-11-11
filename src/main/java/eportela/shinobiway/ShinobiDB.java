@@ -58,7 +58,6 @@ public class ShinobiDB {
 
         return false;
     }
-
     public ShinobiRank getRank(Player player) {
         UUID playerUUID = player.getUniqueId();
         try {
@@ -76,7 +75,6 @@ public class ShinobiDB {
         }
         return null;
     }
-
     public static ShinobiGroup getPlayerGroup(UUID playerUUID) {
         try {
             String sql = "SELECT group_name FROM shinobi_members WHERE player_uuid = ?";

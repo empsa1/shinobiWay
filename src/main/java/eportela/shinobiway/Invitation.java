@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Invitation {
-
     public static boolean inviteToGroup(Player player, String[] args) {
         ShinobiGroup group = ShinobiDB.getPlayerGroup(player.getUniqueId());
         if (group == null || group.getName().length() == 0) {
@@ -45,8 +44,6 @@ public class Invitation {
             ShinobiWay.com_handler(player, "The player you tried to invite is already in a group!", 1);
             return false;
         }
-
-        // Add or create an invitation code list for the target player
         if (ShinobiWay.getInvitationCodes().containsPlayer(playerUUID.toString()) == null) {
             ShinobiWay.getInvitationCodes().addPlayer(playerUUID.toString());
         }
@@ -68,7 +65,6 @@ public class Invitation {
             }
         };
         expirationTask.runTaskLater(ShinobiWay.myManager.getPlugin(), 20 * 30);
-
         return true;
     }
 

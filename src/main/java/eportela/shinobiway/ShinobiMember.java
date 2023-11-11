@@ -14,7 +14,6 @@ public class ShinobiMember {
         this.playerUUID = playerUUID;
         this.rank = rank;
     }
-
     public static ShinobiRank getShinobiRank(UUID playerUUID) {
         try {
             String selectRankSql = "SELECT shinobi_rank FROM shinobi_members WHERE player_uuid = ?";
@@ -41,9 +40,8 @@ public class ShinobiMember {
             }
         }
 
-        return null; // If the current rank is the highest, there is no next rank.
+        return null;
     }
-
     public static ShinobiRank getPreviousRank(ShinobiRank currentRank) {
         ShinobiRank[] ranks = ShinobiRank.values();
         for (int i = 0; i < ranks.length - 1; i++) {
@@ -52,6 +50,6 @@ public class ShinobiMember {
             }
         }
 
-        return null; // If the current rank is the highest, there is no next rank.
+        return null;
     }
 }

@@ -12,10 +12,7 @@ public class DatabaseManager {
 
     DatabaseManager() {
         try {
-            // Register the MySQL driver
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // Connect to the database
             String url = "jdbc:mysql://localhost:3306/shinobiway";
             String username = "god";
             String password = "pluginmanager";
@@ -23,7 +20,6 @@ public class DatabaseManager {
             connection = DriverManager.getConnection(url, username, password);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            // Handle connection errors
         }
     }
 

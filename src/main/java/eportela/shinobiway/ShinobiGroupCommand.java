@@ -12,7 +12,7 @@ public class ShinobiGroupCommand implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("leave")) { //working
             return (ShinobiDB.removePlayerFromGroup(player, group));
         } else if (args[0].equalsIgnoreCase("bank")) { //working
-            return (ShinobiGroupDB.displayBank(player, group));
+              return (BankDB.displayBank(player, group));
         } else if (args[0].equalsIgnoreCase("owner")) { //maybe
             return (ShinobiGroupDB.setGroupOwner(player, group, args));
         } else if (args[0].equalsIgnoreCase("ally")) {

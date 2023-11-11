@@ -13,7 +13,7 @@ public class PlayerUtils {
                 return onlinePlayer;
             }
         }
-        return null; // Player not found
+        return null;
     }
 
     public static UUID getPlayer(String displayName) {
@@ -21,7 +21,6 @@ public class PlayerUtils {
         if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) {
             return offlinePlayer.getUniqueId();
         } else {
-            // Return null or handle the case when the player is not found
             return null;
         }
     }

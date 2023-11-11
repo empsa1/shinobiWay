@@ -1,5 +1,6 @@
 package eportela.shinobiway;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -107,11 +108,12 @@ public class DiplomacyDB {
             return false;
         }
         else {
-            ShinobiWay.com_handler();
+            ShinobiWay.com_handler(Bukkit.getPlayer(player.getUniqueId()), group.getName() +
+                    " has proposed an neutral condition to: " + group2.getName() + ".\nTo accept do /shinobigroup yNeutral <group name>", 0);
             BukkitRunnable expirationTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-
+                    ShinobiWay.com_handler(Bukkit.getPlayer(player.getUniqueId()), "The neutral proposal from " + group.getName() + " has expired!", 0);
                 }
 
             };

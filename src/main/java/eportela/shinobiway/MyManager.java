@@ -10,5 +10,4 @@ public class MyManager {
     public ShinobiWay getPlugin() {
         return plugin;
     }
-    // You can now access the plugin instance using 'this.plugin'
 }
