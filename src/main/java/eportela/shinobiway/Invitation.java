@@ -27,13 +27,11 @@ public class Invitation {
             ShinobiWay.com_handler(player, "You must be the owner of the group to invite players.", 1);
             return false;
         }
-
         Player target = PlayerUtils.getOnlinePlayer(args[1]);
         if (target == null) {
             ShinobiWay.com_handler(player, "The player you tried to invite either does not exist or is not online!", 1);
             return false;
         }
-
         UUID playerUUID = target.getUniqueId();
         if (playerUUID.toString().length() == 0) {
             ShinobiWay.com_handler(player, "The player you tried to invite either does not exist or is not online!", 1);
@@ -67,19 +65,16 @@ public class Invitation {
         expirationTask.runTaskLater(ShinobiWay.myManager.getPlugin(), 20 * 30);
         return true;
     }
-
     public static boolean acceptGroupInvite(Player player, String[] args) {
         if (args == null || args.length < 2 || args[1].length() == 0) {
             ShinobiWay.com_handler(player, "Invalid group name! Correct usage: /shinobiGroup accept <group_name>", 1);
             return false;
         }
-
         UUID playerUUID = player.getUniqueId();
         if (ShinobiWay.getInvitationCodes().containsPlayer(playerUUID.toString()) == null) {
             ShinobiWay.com_handler(player, "No pending group invitation found.", 1);
             return false;
         }
-
         String groupToJoin = args[1];
         String storedInvitationCode = ShinobiWay.getInvitationCodes().containsPlayer(playerUUID.toString()).toString();
         System.out.println("Stored invitation code: " + storedInvitationCode);

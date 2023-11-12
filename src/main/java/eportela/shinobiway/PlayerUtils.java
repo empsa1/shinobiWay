@@ -15,7 +15,6 @@ public class PlayerUtils {
         }
         return null;
     }
-
     public static UUID getPlayer(String displayName) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(displayName);
         if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) {

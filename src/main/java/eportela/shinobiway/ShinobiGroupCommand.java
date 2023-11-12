@@ -32,7 +32,7 @@ public class ShinobiGroupCommand implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("war")) {
             return (War.tryOpenWARGUI(player, group, args));
         }
-        Utils.error_handler(player, ErrorCode.USAGE.ordinal());
+        ShinobiWay.com_handler(player, "Something went wrong!", 1);
         return false;
     }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

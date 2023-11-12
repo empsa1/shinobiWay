@@ -26,7 +26,6 @@ public final class ShinobiWay extends JavaPlugin {
         MessageHandler msg = new MessageHandler(message, errorCode);
         msg.msg(target);
     }
-
     @Override
     public void onEnable() {
         //luckPermsAPI = LuckPermsProvider.get();
@@ -37,15 +36,6 @@ public final class ShinobiWay extends JavaPlugin {
         getCommand("shinobiGroup").setExecutor(new ShinobiGroupCommand());
         com_handler(null, "Success initializing " + plugin_version, 0);
     }
-
-    public static InviteList getInvitationCodes() {
-        return invitationCodes;
-    }
-
-    public static Diplomacy getDiplomacyCodes() {
-        return diplomacyCodes;
-    }
-
     @Override
     public void onDisable() {
         DatabaseManager.getInstance().close();

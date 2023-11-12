@@ -6,7 +6,6 @@ public class MyManager {
     public MyManager(ShinobiWay plugin) {
         this.plugin = plugin;
     }
-
     public ShinobiWay getPlugin() {
         return plugin;
     }

@@ -25,7 +25,6 @@ public class BankDB {
         ShinobiWay.com_handler(player, "Something went wrong!", 1);
         return -1;
     }
-
     public static boolean displayBank(Player player, ShinobiGroup group) {
         String groupName = group.getName();
         try {
@@ -46,7 +45,6 @@ public class BankDB {
         ShinobiWay.com_handler(player, "Something went wrong!", 1);
         return false;
     }
-
     public static boolean setBank(Player player, int delta) {
         ShinobiGroup group = ShinobiDB.getPlayerGroup(player.getUniqueId());
         if (ShinobiDB.getPlayerGroup(player.getUniqueId()).getOwnerUUID().toString().equals(player.getUniqueId().toString())) {

@@ -1,7 +1,6 @@
 package eportela.shinobiway;
 
 public enum TownLevel{
-
     RUINS,
     FIELD,
     FARM,

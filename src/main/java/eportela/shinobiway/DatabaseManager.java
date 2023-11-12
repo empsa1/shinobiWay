@@ -22,14 +22,12 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
             instance = new DatabaseManager();
         }
         return instance;
     }
-
     public static Connection getConnection() {
         return connection;
     }

@@ -93,7 +93,6 @@ public class ShinobiGroupDB {
         ShinobiWay.com_handler(player, "You have successfully declared " + args[1] + " as the new leader of " + groupName, 0);
         return true;
     }
-
     public static boolean tryDisband(Player player, ShinobiGroup group) {
         System.out.println("Inside try disband");
         String groupName = group.getName();
@@ -130,7 +129,6 @@ public class ShinobiGroupDB {
         ShinobiWay.com_handler(player, "How did we get here!", 1);
         return false;
     }
-
     public static boolean addGroup(Player player, String groupName, UUID ownerUUID, GroupType groupType) {
         if (groupName == null || groupName.length() == 0 || ownerUUID == null || groupType.ordinal() < 0) {
             return false;
@@ -150,7 +148,6 @@ public class ShinobiGroupDB {
         }
         return false;
     }
-
     public static boolean createGroup(Player player, String[] args) {
         if (args[1].length() == 0) {
             ShinobiWay.com_handler(player, "Invalid group name!", 1);

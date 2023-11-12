@@ -36,7 +36,6 @@ public class Diplomacy { //0 element of each array is the player-uuid the follow
         temp.add(groupName);
         diplomacyCodes.add(temp);
     }
-
     public void addInvite(String groupName1, String groupName2) {
         for (ArrayList strArr : diplomacyCodes) {
             if (strArr.get(0).equals(groupName1)) {
@@ -44,7 +43,6 @@ public class Diplomacy { //0 element of each array is the player-uuid the follow
             }
         }
     }
-
     public void removeInvite(String groupName1, String groupName2) {
         if (! diplomacyExists(containsGroup(groupName1), groupName2)) {
             return ;

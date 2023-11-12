@@ -53,11 +53,10 @@ public class TownDB {
         }
         return -1;
     }
-
-    public static boolean setTownLevel(String townName, TownLevel newLevel) {
+    public static boolean setTownLevel(String townName, int newLevel) {
         String sql = "UPDATE shinobi_towns SET town_level = ? WHERE town_name = ?";
         try (PreparedStatement pstmt = DatabaseManager.getConnection().prepareStatement(sql)) {
-            pstmt.setInt(1, newLevel.ordinal());
+            pstmt.setInt(1, newLevel);
             pstmt.setString(2, townName);
             int rowsUpdated = pstmt.executeUpdate();
             return rowsUpdated > 0;

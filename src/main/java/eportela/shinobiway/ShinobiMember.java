@@ -49,7 +49,6 @@ public class ShinobiMember {
                 return ranks[i - 1];
             }
         }
-
         return null;
     }
 }

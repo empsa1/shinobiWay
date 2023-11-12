@@ -11,7 +11,6 @@ public class InviteList { //0 element of each array is the player-uuid the follo
     public InviteList(ArrayList<ArrayList<String>> invitationCodes) {
         this.invitationCodes = invitationCodes;
     }
-
     public static ArrayList<ArrayList<String>> getInvitationCodes() {
         return invitationCodes;
     }
@@ -40,7 +39,6 @@ public class InviteList { //0 element of each array is the player-uuid the follo
         temp.add(playerUUID);
         invitationCodes.add(temp);
     }
-
     public void addInvite(String playerUUID, String groupName) {
         for (ArrayList strArr : invitationCodes) {
             if (strArr.get(0).equals(playerUUID)) {
@@ -59,7 +57,6 @@ public class InviteList { //0 element of each array is the player-uuid the follo
             }
         }
     }
-
     public void removePlayer(String playerUUID) {
         if (containsPlayer(playerUUID) != null) {
             return ;

@@ -20,7 +20,7 @@ public class HierarchyDB {
             ShinobiWay.com_handler(player, "Invalid group! Contact staff!", 1);
             return false;
         }
-        if (!player.getUniqueId().toString().equals(group.getOwnerUUID().toString())) {
+        if (!ShinobiGroupUtils.isOwnerGroup(player.getUniqueId())) {
             ShinobiWay.com_handler(player, "You do not have permissions to kick players from " + group.getName(), 1);
             return false;
         }
@@ -57,7 +57,6 @@ public class HierarchyDB {
         }
         return false;
     }
-
     public static boolean tryDemote(Player player, ShinobiGroup group, String[] args) {
         if (args == null) {
             return false;
@@ -98,7 +97,6 @@ public class HierarchyDB {
         }
         return false;
     }
-
     public static boolean tryPromote(Player player, ShinobiGroup group, String[] args) {
         if (args == null) {
             return false;

@@ -42,9 +42,7 @@ public class ShinobiDB {
                 pstmt.setString(1, groupName);
                 pstmt.setInt(2, ShinobiRank.GENIN.ordinal());
                 pstmt.setString(3, player.getUniqueId().toString());
-
                 int rowsInserted = pstmt.executeUpdate();
-
                 if (rowsInserted > 0) {
                     System.out.println("A new Shinobi Member was added successfully.");
                     return true;
@@ -55,7 +53,6 @@ public class ShinobiDB {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
     public ShinobiRank getRank(Player player) {
