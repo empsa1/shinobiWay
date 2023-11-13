@@ -11,7 +11,7 @@ import java.util.UUID;
 public class ShinobiDB {
     public static boolean removePlayerFromGroup(Player player, ShinobiGroup group) {
         if (ShinobiGroupDB.getGroup(group.getName()).getName().length() == 0) {
-            Utils.error_handler(player, ErrorCode.TARGET_NO_GROUP.ordinal());
+            ShinobiWay.com_handler(player, "Something went wrong!", 1);
             return false;
         }
         if (ShinobiGroupDB.getGroup(group.getName()).getOwnerUUID().toString().equals(player.getUniqueId().toString())) {

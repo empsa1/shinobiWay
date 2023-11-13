@@ -58,7 +58,7 @@ public class DiplomacyDB {
     public static boolean tryRivalry(Player player, ShinobiGroup inviterV, String[] args) {
         System.out.println("Inside tryRivalry info: " + player.getDisplayName() + inviterV.getName() + args[1]);
         if (args[1].length() == 0) {
-            Utils.error_handler(player, ErrorCode.INVALID_TARGET.ordinal());
+            ShinobiWay.com_handler(player, "Invalid player", 1);
             return false;
         }
         if (args[1].equals(inviterV.getName())) {
@@ -68,15 +68,14 @@ public class DiplomacyDB {
         DiplomacyStatus status = getDiplomacyStatus(inviterV, ShinobiGroupDB.getGroup(args[1]));
         System.out.println("Current status: " + status);
         if (status == DiplomacyStatus.ENEMIES) {
-            Utils.error_handler(player, ErrorCode.ALREADY_ENEMY.ordinal());
+            ShinobiWay.com_handler(player, "You are already enemy with " + args[1], 1);
+            return false;
         } else {
             System.out.println("Entering setDiplomacy()");
             ShinobiWay.com_handler(player, "You have successfully declared " + args[1] + " as your enemy!", 0);
             return (setDiplomacy(inviterV, ShinobiGroupDB.getGroup(args[1]), DiplomacyStatus.ENEMIES));
         }
-        return false;
     }
-
     public static boolean tryNeutral(Player player, ShinobiGroup group1, String[] args) {
         ShinobiGroup group = ShinobiDB.getPlayerGroup(player.getUniqueId());
         if (group == null || group.getName().length() == 0) {
@@ -108,14 +107,16 @@ public class DiplomacyDB {
         } else if (target == null) {
             ShinobiWay.com_handler(player, "That group does not exist or it does not have a kage! If you think this is not an error contact devs!", 1);
             return false;
-        } else {
-            RequestDB.createRequest(group, group2, DiplomacyStatus.NEUTRAL);
+        } else if (RequestDB.alreadyRequest(group, group2)) {
+            setDiplomacy(group1, group2, DiplomacyStatus.NEUTRAL);
+            ShinobiWay.com_handler(player, "You have set your diplomacy with " + group2.getName() + " as neutral!", 0);
+            ShinobiWay.com_handler(target, "Your alliance with " + group1.getName() + " is now neutral", 0);
+        }
+            RequestDB.createRequest(group, group2, DiplomacyStatus.NEUTRAL); //Request Table : group1_name group2_name request_Id Neutral --> delete when done
             ShinobiWay.com_handler(target, group.getName() +
                     " has proposed an neutral condition to: " + group2.getName() + ".\nTo accept do /shinobigroup neutral <group name>", 0);
             return true;
-        }
     }
-
     public static boolean tryAlliance(Player player, ShinobiGroup group1, String[] args) {
         ShinobiGroup group = ShinobiDB.getPlayerGroup(player.getUniqueId());
         if (group == null || group.getName().length() == 0) {
